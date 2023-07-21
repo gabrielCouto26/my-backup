@@ -28,7 +28,7 @@ def upload_file(drive_service, file_path, folder_id):
 
     print("File uploaded successfully. File ID:", file.get("id"))
 
-def main():
+def execute():
     creds = None
 
     if os.path.exists('token.json'):
@@ -56,6 +56,3 @@ def main():
     except HttpError as error:
         print(f'An error occurred: {error}')
 
-
-if __name__ == '__main__':
-    main()
