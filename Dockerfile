@@ -10,4 +10,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+ENV FILE_PATH='/app/path/to/file'
+ENV FOLDER_ID='google_drive_folder_id'
+
 CMD ["python3", "-u", "/app/quickstart.py"]
