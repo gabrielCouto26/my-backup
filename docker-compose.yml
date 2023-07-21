@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  app:
+    container_name: my_backup
+    build: .
+    volumes:
+      - ./:/app
