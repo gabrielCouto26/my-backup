@@ -5,30 +5,26 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaFileUpload
 
-from apiclient.http import MediaFileUpload
-
-FILE_PATH = os.environ.get("FILE_PATH")
-FOLDER_ID = os.environ.get("FOLDER_ID")
-
-# If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
 def upload_file(drive_service, file_path, folder_id):
     file_metadata = {
         'name': os.path.basename(file_path),
         'parents': [folder_id],
-        'mimeType': '*/*'
+        'mimeType': 'application/zip'
     }
 
-    media = MediaFileUpload(file_path, resumable=True)
+    media = MediaFileUpload(
+        file_path, mimetype='application/zip', resumable=True)
 
     file = drive_service.files().create(
         body=file_metadata, media_body=media, fields='id').execute()
 
     print("File uploaded successfully. File ID:", file.get("id"))
 
-def execute():
+def execute(file_path, folder_id):
     creds = None
 
     if os.path.exists('token.json'):
@@ -51,8 +47,7 @@ def execute():
     try:
         service = build('drive', 'v3', credentials=creds)
 
-        upload_file(service, FILE_PATH, FOLDER_ID)
+        upload_file(service, file_path, folder_id)
 
     except HttpError as error:
         print(f'An error occurred: {error}')
-

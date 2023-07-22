@@ -16,4 +16,3 @@
 /home/gabriel/env/facul
 /home/gabriel/env/hitbel
 /home/gabriel/env/pato
-
