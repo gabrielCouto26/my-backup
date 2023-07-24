@@ -6,6 +6,8 @@ from datetime import datetime
 import upload
 
 
+BACKUP_FILES_PATH = '/home/gabriel/env/dev/my-backup/backup_files.txt'
+
 def main():
     try:
         print('Starting backup')
@@ -27,7 +29,7 @@ def main():
             shutil.rmtree(temp_folder)
             os.makedirs(temp_folder)
 
-        file = open("backup_files.txt", "r")
+        file = open(BACKUP_FILES_PATH, "r")
         file_lines = file.read().splitlines()
 
         print('Copying files...')

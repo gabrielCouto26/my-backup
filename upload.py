@@ -9,6 +9,9 @@ from googleapiclient.http import MediaFileUpload
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
+TOKEN_PATH='/home/gabriel/env/dev/my-backup/token.json'
+CREDENTIALS_PATH='/home/gabriel/env/dev/my-backup/credentials.json'
+
 def upload_file(drive_service, file_path, folder_id):
     file_metadata = {
         'name': os.path.basename(file_path),
@@ -27,8 +30,9 @@ def upload_file(drive_service, file_path, folder_id):
 def execute(file_path, folder_id):
     creds = None
 
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    if os.path.exists(TOKEN_PATH):
+        creds = Credentials.from_authorized_user_file(
+            TOKEN_PATH, SCOPES)
 
     if not creds or not creds.valid:
 
@@ -36,12 +40,12 @@ def execute(file_path, folder_id):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                CREDENTIALS_PATH, SCOPES)
             
             creds = flow.run_local_server(host='localhost', port=8080)
         
         # Save the credentials for the next run
-        with open('token.json', 'w') as token:
+        with open(TOKEN_PATH, 'w') as token:
             token.write(creds.to_json())
 
     try:
