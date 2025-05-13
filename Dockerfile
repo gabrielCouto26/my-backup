@@ -1,15 +1,13 @@
 FROM python:3.11-slim
 
-WORKDIR app/
+WORKDIR /app
 
-COPY requirements.txt requirements.txt
-
-EXPOSE 8080
+COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
 COPY . .
 
-ENV FOLDER_ID='google_drive_folder_id'
+EXPOSE 8080
 
 CMD ["python3", "-u", "/app/quickstart.py"]

@@ -4,6 +4,6 @@
 /lib64
 pyvenv.cfg
 
-
+.env
 credentials.json
 token.json
