@@ -55,3 +55,41 @@ Using Docker Compose, you can build and run the container with a single command:
 
 ```bash
 docker-compose up --build
+```
+
+### 5. Running Locally Without Docker (Optional)
+You can also run the backup script directly on your local machine without Docker, in case you want to keep the backup locally or prefer a simpler setup.
+
+Prerequisites
+- Python 3.11+ installed
+- A virtual environment (recommended)
+
+Steps
+
+1. Create and activate a virtual environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+2. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Set environment variables:
+
+```bash
+export GOOGLE_DRIVE_BACKUP_FOLDER_ID=your_google_drive_folder_id
+export OUTPUT_FOLDER=/your/output/folder  # optional
+```
+
+4. Run the backup:
+
+```bash
+python3 backup.py
+```
+
+The backup .zip will be saved to the folder specified in OUTPUT_FOLDER and uploaded to Google Drive if credentials are set correctly.
