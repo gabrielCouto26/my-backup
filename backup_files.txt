@@ -10,6 +10,6 @@
 /home/gabriel/Imagens
 /home/gabriel/Videos
 /home/gabriel/env/facul
-/home/gabriel/env/hitbel
 /home/gabriel/env/pato
 /home/gabriel/.pass-encrypted
+/home/gabriel/env/dev/contexto_do_projeto_vercel_express_prisma_react.md

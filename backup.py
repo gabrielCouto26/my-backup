@@ -3,12 +3,14 @@ import shutil
 from zipfile import ZipFile
 from datetime import datetime
 
+import logging
 import upload
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def main():
     try:
-        print('Starting backup')
+        logging.info('Starting backup')
         start_time = datetime.now()
 
         FOLDER_ID = os.environ.get("GOOGLE_DRIVE_BACKUP_FOLDER_ID", '')
@@ -25,12 +27,12 @@ def main():
         temp_folder = os.path.join(OUTPUT_FOLDER, "temp")
         if os.path.exists(temp_folder):
             shutil.rmtree(temp_folder)
-            os.makedirs(temp_folder)
+        os.makedirs(temp_folder)
 
         file = open("backup_files.txt", "r")
         file_lines = file.read().splitlines()
 
-        print('Copying files...')
+        logging.info('Copying files...')
         for file_path in file_lines:
             
             relative_path = os.path.relpath(file_path, start=os.path.dirname(file_path))
@@ -46,12 +48,12 @@ def main():
             elif os.path.isdir(file_path):
                 shutil.copytree(file_path, target_path)
             
-        print('All files copied successfully to', temp_folder)
+        logging.info(f'All files copied successfully to {temp_folder}')
 
         # Generate the full path for the output zip file
         zip_path = os.path.join(OUTPUT_FOLDER, file_name)
 
-        print('Zipping files...')
+        logging.info('Zipping files...')
         # Create a zip file and write the files into it
         with ZipFile(zip_path, 'a') as zipf:
             for root, _, files in os.walk(temp_folder):
@@ -60,22 +62,22 @@ def main():
                     relative_path = os.path.relpath(file_path, start=temp_folder)
                     zipf.write(file_path, arcname=relative_path)
 
-        print('All files zipped successfully to', zip_path)
+        logging.info(f'All files zipped successfully to {zip_path}')
 
         # Remove the temporary folder after zipping
         shutil.rmtree(temp_folder)
 
-        print('Proceding to upload...')
+        logging.info('Proceding to upload...')
 
         # Upload the zip file to Google Drive
         upload.execute(zip_path, FOLDER_ID)
 
-        print('Backup completed successfully.')
+        logging.info('Backup completed successfully.')
         end_time = datetime.now()
-        print('Total time:', end_time - start_time)
+        logging.info(f'Total time: {end_time - start_time}')
 
     except Exception as e:
-        print("Error: ", e)
+        logging.error(f"An error occurred: {e}", exc_info=True)
         raise e
 
 if __name__ == "__main__":

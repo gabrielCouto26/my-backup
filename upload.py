@@ -1,4 +1,5 @@
 import os
+import logging
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -22,7 +23,7 @@ def upload_file(drive_service, file_path, folder_id):
     file = drive_service.files().create(
         body=file_metadata, media_body=media, fields='id').execute()
 
-    print("File uploaded successfully. File ID:", file.get("id"))
+    logging.info(f"File uploaded successfully. File ID: {file.get('id')}")
 
 def execute(file_path, folder_id):
     creds = None
@@ -38,7 +39,7 @@ def execute(file_path, folder_id):
             flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials.json', SCOPES)
             
-            creds = flow.run_local_server(host='localhost', port=8080)
+            creds = flow.run_local_server()
         
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
@@ -50,4 +51,7 @@ def execute(file_path, folder_id):
         upload_file(service, file_path, folder_id)
 
     except HttpError as error:
-        print(f'An error occurred: {error}')
+        logging.error(f'An HTTP error occurred: {error}', exc_info=True)
+    except Exception as error:
+        logging.error(f'An unexpected error occurred: {error}', exc_info=True)
+

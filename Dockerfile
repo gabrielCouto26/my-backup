@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["python3", "-u", "/app/quickstart.py"]
+CMD ["python3", "-u", "/app/backup.py"]

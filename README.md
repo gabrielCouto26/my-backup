@@ -18,15 +18,15 @@ This project automatically creates backups of specified local files and director
 
 - **Google API Credentials:**  
   - A Google account with access to Google Drive.
-  - A `credentials.json` file obtained from the [Google Cloud Console](https://console.cloud.google.com/).
+  - A `credentials.json` file obtained from the [Google Cloud Console](https://console.cloud.google.com/). The OAuth 2.0 Client ID must be of type **Desktop application**.
   
 - **Environment Variables:**  
   - Set the `GOOGLE_DRIVE_BACKUP_FOLDER_ID` environment variable with the target folder's ID in Google Drive.
   - Optionally, set the `OUTPUT_FOLDER` to specify where the ZIP files will be stored locally.
 
 - **Software Requirements:**  
-  - Docker
-  - Docker Compose
+  - Docker & Docker Compose
+  - Python 3.11+
 
 ---
 
@@ -34,11 +34,10 @@ This project automatically creates backups of specified local files and director
 
 ### 1. Prepare Your Credentials
 
-- Place your `credentials.json` in the root directory of the project.
-- The first time you run the backup, the application will open a browser window for Google authentication and generate a `token.json` file for subsequent executions.
+- Download your OAuth 2.0 Client ID JSON file from the Google Cloud Console and save it as `credentials.json` in the root directory of this project.
 
-### 3. Set your environment variables
-  - Create a .env file
+### 2. Set Environment Variables
+  - Create a `.env` file in the project root with the following content:
   ```bash
     GOOGLE_DRIVE_BACKUP_FOLDER_ID=your_google_drive_folder_id
     OUTPUT_FOLDER=/home/user/backup
@@ -49,47 +48,32 @@ This project automatically creates backups of specified local files and director
 - Create a file named `backup_files.txt` in the project’s root directory.
 - List all the file paths or directories you wish to backup, one per line.
 
-### 4. Build and Run the Container
+### 4. First-Time Authentication (Required)
 
-Using Docker Compose, you can build and run the container with a single command:
+To allow the application to access your Google Drive, you must perform a one-time authentication locally. This process will open a browser window and create a `token.json` file, which will be used for all future automated backups.
+
+1.  **Create and activate a virtual environment:**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3.  **Run the script to authenticate:**
+    ```bash
+    python3 backup.py
+    ```
+    Follow the instructions in your browser. Once you grant access, the `token.json` file will be created in the project root, and the first backup will run.
+
+### 5. Run Subsequent Backups with Docker
+
+After `token.json` has been created, you can run all future backups easily and non-interactively using Docker Compose.
 
 ```bash
 docker-compose up --build
 ```
-
-### 5. Running Locally Without Docker (Optional)
-You can also run the backup script directly on your local machine without Docker, in case you want to keep the backup locally or prefer a simpler setup.
-
-Prerequisites
-- Python 3.11+ installed
-- A virtual environment (recommended)
-
-Steps
-
-1. Create and activate a virtual environment:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-2. Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-3. Set environment variables:
-
-```bash
-export GOOGLE_DRIVE_BACKUP_FOLDER_ID=your_google_drive_folder_id
-export OUTPUT_FOLDER=/your/output/folder  # optional
-```
-
-4. Run the backup:
-
-```bash
-python3 backup.py
-```
-
-The backup .zip will be saved to the folder specified in OUTPUT_FOLDER and uploaded to Google Drive if credentials are set correctly.
+The backup .zip will be saved to the folder specified in OUTPUT_FOLDER and uploaded to Google Drive.
