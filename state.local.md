@@ -43,14 +43,16 @@ O projeto é uma ferramenta de automação de backup que coleta arquivos e diret
 - **Status:** ✅ Concluído.
 - **Detalhes:** Os logs registram cada etapa, sucesso, erros e o tempo total da operação, facilitando a depuração.
 
+### 7. Automação de Execução Local
+- **Descrição:** Script shell para automatizar a configuração do ambiente virtual, instalação de dependências e execução do backup localmente, sem a necessidade de Docker.
+- **Implementação:** Arquivo `run_local_backup.sh`.
+- **Status:** ✅ Concluído.
+- **Detalhes:** Garante a idempotência na configuração do ambiente, carrega variáveis de ambiente do `.env` e oferece um ponto de entrada único para o processo de backup local.
+
 ## Estrutura de Arquivos Chave
 - `backup.py`: Orquestrador do processo (Leitura -> Cópia -> Zip -> Upload).
 - `upload.py`: Lógica específica de comunicação com o Google Drive.
 - `backup_files.txt`: Lista de alvos do backup.
 - `requirements.txt`: Dependências do projeto.
 - `state.local.md`: Documento de estado e funcionalidades do projeto.
-
-## Próximos Passos Sugeridos
-- [ ] Implementar rotação de backups (deletar backups antigos no Drive).
-- [ ] Adicionar notificações (e-mail ou webhook) em caso de falha.
-- [ ] Melhorar o tratamento de erros para caminhos inexistentes no `backup_files.txt`.
+- `run_local_backup.sh`: Script para automação da execução local.
