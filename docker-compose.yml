@@ -1,8 +1,0 @@
-services:
-  app:
-    container_name: my_backup
-    build: .
-    volumes:
-      - ./:/app
-    env_file:
-      - .env
