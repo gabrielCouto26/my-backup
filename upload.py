@@ -10,6 +10,7 @@ from googleapiclient.http import MediaFileUpload
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
+
 def upload_file(drive_service, file_path, folder_id):
     file_metadata = {
         'name': os.path.basename(file_path),
@@ -25,6 +26,7 @@ def upload_file(drive_service, file_path, folder_id):
 
     logging.info(f"File uploaded successfully. File ID: {file.get('id')}")
 
+
 def execute(file_path, folder_id):
     creds = None
 
@@ -38,9 +40,9 @@ def execute(file_path, folder_id):
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials.json', SCOPES)
-            
+
             creds = flow.run_local_server()
-        
+
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
@@ -54,4 +56,3 @@ def execute(file_path, folder_id):
         logging.error(f'An HTTP error occurred: {error}', exc_info=True)
     except Exception as error:
         logging.error(f'An unexpected error occurred: {error}', exc_info=True)
-

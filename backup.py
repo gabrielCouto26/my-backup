@@ -6,7 +6,9 @@ from datetime import datetime
 import logging
 import upload
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 def main():
     try:
@@ -15,7 +17,8 @@ def main():
 
         FOLDER_ID = os.environ.get("GOOGLE_DRIVE_BACKUP_FOLDER_ID", '')
         if not FOLDER_ID:
-            raise Exception('GOOGLE_DRIVE_BACKUP_FOLDER_ID environment variable is required')
+            raise Exception(
+                'GOOGLE_DRIVE_BACKUP_FOLDER_ID environment variable is required')
 
         OUTPUT_FOLDER = os.environ.get("OUTPUT_FOLDER", '/home/gabriel/Backup')
         if not os.path.exists(OUTPUT_FOLDER):
@@ -34,8 +37,9 @@ def main():
 
         logging.info('Copying files...')
         for file_path in file_lines:
-            
-            relative_path = os.path.relpath(file_path, start=os.path.dirname(file_path))
+
+            relative_path = os.path.relpath(
+                file_path, start=os.path.dirname(file_path))
             target_path = os.path.join(temp_folder, relative_path)
 
             # Make sure the target directory exists
@@ -47,7 +51,7 @@ def main():
             # If it's a directory, copy the entire directory recursively
             elif os.path.isdir(file_path):
                 shutil.copytree(file_path, target_path)
-            
+
         logging.info(f'All files copied successfully to {temp_folder}')
 
         # Generate the full path for the output zip file
@@ -59,7 +63,8 @@ def main():
             for root, _, files in os.walk(temp_folder):
                 for file in files:
                     file_path = os.path.join(root, file)
-                    relative_path = os.path.relpath(file_path, start=temp_folder)
+                    relative_path = os.path.relpath(
+                        file_path, start=temp_folder)
                     zipf.write(file_path, arcname=relative_path)
 
         logging.info(f'All files zipped successfully to {zip_path}')
@@ -79,6 +84,7 @@ def main():
     except Exception as e:
         logging.error(f"An error occurred: {e}", exc_info=True)
         raise e
+
 
 if __name__ == "__main__":
     main()
